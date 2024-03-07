@@ -11,7 +11,7 @@ public:
 	Sudoku Solve();
 
 private: 
-	void CheckRow(int i);
-	void CheckColumn(int j);
-	void CheckGrid(int k);
+	void CheckRow(int i, int index);
+	void CheckColumn(int j, int index);
+	void CheckGrid(int k, int index);
 };

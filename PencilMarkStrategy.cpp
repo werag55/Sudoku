@@ -16,9 +16,14 @@ PencilMark::PencilMark(const Sudoku& sudoku)
 	}
 }
 
-void PencilMark::CheckRow(int i, int j)
+void PencilMark::CheckRow(int i, int index)
 {
-
+	for (int j = 0; j < _sudoku._boardDim; j++)
+	{
+		int val = _sudoku._sudokuBoard[_sudoku._boardDim * i + j];
+		if (val != 0)
+			_pencilMarks[index][val - 1] = false;
+	}
 }
 
 
@@ -38,9 +43,10 @@ Sudoku PencilMark::Solve()
 		{
 			for (int j = 0; j < _sudoku._boardDim; j++)
 			{
-				if (_sudoku._sudokuBoard[_sudoku._boardDim * i + j] == 0)
-				{
+				int index = _sudoku._boardDim * i + j;
 
+				if (_sudoku._sudokuBoard[index] == 0)
+				{
 					if (isSolved && _sudoku._sudokuBoard[_sudoku._boardDim * i + j] == 0)
 						isSolved = false;
 				}
