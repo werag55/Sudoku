@@ -13,5 +13,6 @@ public:
 private: 
 	void CheckRow(int i, int index);
 	void CheckColumn(int j, int index);
-	void CheckGrid(int k, int index);
+	void CheckGrid(int indexI, int indexJ);
+	int TryToMark(int index);
 };
