@@ -1,6 +1,7 @@
 #include <iostream>
 
 #include "Sudoku.h"
+#include "PencilMarkStrategy.h"
 
 int main(int argc, char* argv[])
 {
@@ -13,4 +14,8 @@ int main(int argc, char* argv[])
 											0, 6, 0, 0, 0, 0, 2, 8, 0,
 											0, 0, 0, 0, 8, 0, 0, 7, 9});
 	sudoku.Print();
+
+	PencilMark pencilMark(sudoku);
+	Sudoku solved = pencilMark.Solve();
+	solved.Print();
 }

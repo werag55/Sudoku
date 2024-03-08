@@ -53,6 +53,22 @@ void PencilMark::CheckGrid(int indexI, int indexJ)
 	}
 }
 
+int PencilMark::TryToMark(int index)
+{
+	int val = 0;
+	for (int i = 0; i < _sudoku._boardDim; i++)
+	{
+		if (_pencilMarks[index][i] == true)
+		{
+			if (val == 0)
+				val = _pencilMarks[index][i];
+			else
+				return 0;
+		}
+	}
+	return val;
+}
+
 Sudoku PencilMark::Solve()
 {
 	bool isSolved = false;
@@ -69,8 +85,7 @@ Sudoku PencilMark::Solve()
 				CheckRow(i, index);
 				CheckColumn(j, index);
 				CheckGrid(i, j);
-
-
+				_sudoku._sudokuBoard[index] = TryToMark(index);
 
 				if (_sudoku._sudokuBoard[index] == 0)
 				{
@@ -79,6 +94,8 @@ Sudoku PencilMark::Solve()
 				}
 			}
 		}
+
+		//_sudoku.Print();
 	}
 
 	return _sudoku;
