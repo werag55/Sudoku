@@ -19,7 +19,7 @@ Sudoku::Sudoku(const Sudoku& other) :
 	_gridDim(other._gridDim), _boardDim(other._boardDim) 
 {
 	_sudokuBoard = new int[_boardDim * _boardDim];
-	for (int i = 0; i < _boardDim * _boardDim; ++i)
+	for (int i = 0; i < _boardDim * _boardDim; i++)
 		_sudokuBoard[i] = other._sudokuBoard[i];
 }
 

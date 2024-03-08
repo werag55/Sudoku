@@ -16,6 +16,17 @@ PencilMark::PencilMark(const Sudoku& sudoku)
 	}
 }
 
+int PencilMark::CountFixedValues()
+{
+	int ret = 0;
+
+	for (int i = 0; i < _sudoku._boardDim * _sudoku._boardDim; i++)
+		if (_sudoku._sudokuBoard[i] != 0)
+			ret++;
+
+	return ret;
+}
+
 void PencilMark::CheckRow(int i, int index)
 {
 	for (int j = 0; j < _sudoku._boardDim; j++)
@@ -71,14 +82,13 @@ int PencilMark::TryToMark(int index)
 
 Sudoku PencilMark::Solve()
 {
-	bool isSolved = false;
+	int toSolve = _sudoku._boardDim * _sudoku._boardDim - CountFixedValues();
 
-	while (!isSolved)
+	while (toSolve > 0)
 	{
-		isSolved = true;
-		for (int i = 0; i < _sudoku._boardDim; i++)
+		for (int i = 0; i < _sudoku._boardDim && toSolve > 0; i++)
 		{
-			for (int j = 0; j < _sudoku._boardDim; j++)
+			for (int j = 0; j < _sudoku._boardDim && toSolve > 0; j++)
 			{
 				int index = _sudoku._boardDim * i + j;
 				if (_sudoku._sudokuBoard[index] == 0)
@@ -87,8 +97,8 @@ Sudoku PencilMark::Solve()
 					CheckColumn(j, index);
 					CheckGrid(i, j);
 					_sudoku._sudokuBoard[index] = TryToMark(index);
-					if (isSolved && _sudoku._sudokuBoard[_sudoku._boardDim * i + j] == 0)
-						isSolved = false;
+					if (_sudoku._sudokuBoard[index] != 0)
+						toSolve--;
 				}
 			}
 		}

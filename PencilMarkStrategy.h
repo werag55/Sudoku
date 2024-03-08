@@ -11,6 +11,7 @@ public:
 	Sudoku Solve();
 
 private: 
+	int CountFixedValues();
 	void CheckRow(int i, int index);
 	void CheckColumn(int j, int index);
 	void CheckGrid(int indexI, int indexJ);
