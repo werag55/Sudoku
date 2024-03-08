@@ -27,9 +27,14 @@ void PencilMark::CheckRow(int i, int index)
 }
 
 
-void PencilMark::CheckColumn(int j)
+void PencilMark::CheckColumn(int j, int index)
 {
-
+	for (int i = 0; i < _sudoku._boardDim; i++)
+	{
+		int val = _sudoku._sudokuBoard[_sudoku._boardDim * i + j];
+		if (val != 0)
+			_pencilMarks[index][val - 1] = false;
+	}
 }
 
 Sudoku PencilMark::Solve()
