@@ -61,7 +61,7 @@ int PencilMark::TryToMark(int index)
 		if (_pencilMarks[index][i] == true)
 		{
 			if (val == 0)
-				val = _pencilMarks[index][i];
+				val = i + 1;
 			else
 				return 0;
 		}
@@ -81,21 +81,19 @@ Sudoku PencilMark::Solve()
 			for (int j = 0; j < _sudoku._boardDim; j++)
 			{
 				int index = _sudoku._boardDim * i + j;
-
-				CheckRow(i, index);
-				CheckColumn(j, index);
-				CheckGrid(i, j);
-				_sudoku._sudokuBoard[index] = TryToMark(index);
-
 				if (_sudoku._sudokuBoard[index] == 0)
 				{
+					CheckRow(i, index);
+					CheckColumn(j, index);
+					CheckGrid(i, j);
+					_sudoku._sudokuBoard[index] = TryToMark(index);
 					if (isSolved && _sudoku._sudokuBoard[_sudoku._boardDim * i + j] == 0)
 						isSolved = false;
 				}
 			}
 		}
 
-		//_sudoku.Print();
+		_sudoku.Print();
 	}
 
 	return _sudoku;
