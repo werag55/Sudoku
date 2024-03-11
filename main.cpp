@@ -2,6 +2,7 @@
 
 #include "Sudoku.h"
 #include "PencilMarkStrategy.h"
+#include "GeneticAlgorithmStrategy.h"
 
 int main(int argc, char* argv[])
 {
@@ -34,7 +35,10 @@ int main(int argc, char* argv[])
 						0, 0, 0, 0, 8, 0, 0, 7, 9});*/
 	sudoku.Print();
 
-	PencilMark pencilMark(sudoku);
+	/*PencilMark pencilMark(sudoku);
 	Sudoku solved = pencilMark.Solve();
-	solved.Print();
+	solved.Print();*/
+
+	GeneticAlgorithm geneticAlgorithm(sudoku);
+	Sudoku solved = geneticAlgorithm.Solve();
 }
