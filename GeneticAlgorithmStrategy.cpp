@@ -67,8 +67,56 @@ void GeneticAlgorithm::GenerateFirstGeneration()
 	}
 }
 
+int GeneticAlgorithm::CountDuplicatesRowColumn(const Sudoku& sudoku, int i, int j)
+{
+	int duplicates = 0;
+	bool* occuredRow = new bool[sudoku._boardDim];
+	bool* occuredColumn = new bool[sudoku._boardDim];
+	for (int ii = 0; ii < sudoku._boardDim; ii++)
+	{
+		occuredRow[ii] = false;
+		occuredColumn[ii] = false;
+	}
+
+	for (int k = 0; k < sudoku._boardDim; k++)
+	{
+		// checking row
+		int val = sudoku._sudokuBoard[sudoku._boardDim * i + k];
+		if (!occuredRow[val - 1])
+			occuredRow[val - 1] = true;
+		else
+			duplicates++;
+
+		// checking column
+		val = sudoku._sudokuBoard[sudoku._boardDim * k + j];
+		if (!occuredColumn[val - 1])
+			occuredColumn[val - 1] = true;
+		else
+			duplicates++;
+	}
+
+	return duplicates;
+}
+
+int GeneticAlgorithm::RateSolution(const Sudoku& sudoku)
+{
+	int score = 0;
+	for (int k = 0; k < sudoku._boardDim; k++)
+	{
+		score += CountDuplicatesRowColumn(sudoku, k, k);
+		std::cout << std::endl << score << std::endl;
+	}
+	return score;
+}
+
+
+
 Sudoku GeneticAlgorithm::Solve()
 {
 	GenerateFirstGeneration();
+	_generation[0].Print();
+	int score = RateSolution(_generation[0]);
+	_generation[0].Print();
+	std::cout << score << std::endl;
 	return _sudoku;
 }

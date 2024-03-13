@@ -19,4 +19,6 @@ private:
 	void FillRandomGrid(int i, int j, Sudoku& sudoku);
 	void FillRandom(Sudoku& sudoku);
 	void GenerateFirstGeneration();
+	int CountDuplicatesRowColumn(const Sudoku& sudoku, int i, int j);
+	int RateSolution(const Sudoku& sudoku);
 };
