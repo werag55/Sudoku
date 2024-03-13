@@ -30,8 +30,9 @@ void GeneticAlgorithm::FillRandomGrid(int i, int j, Sudoku& sudoku)
 
 	std::vector<int> freeValues;
 	for (int ii = 1; ii <= sudoku._boardDim; ii++)
-		freeValues.push_back(ii);
-	int shift = 0;
+		if (!takenValues[ii - 1])
+			freeValues.push_back(ii);
+	/*int shift = 0;
 	for (int ii = 0; ii < sudoku._boardDim; ii++)
 	{
 		if (takenValues[ii])
@@ -40,7 +41,7 @@ void GeneticAlgorithm::FillRandomGrid(int i, int j, Sudoku& sudoku)
 			freeValues.erase(freeValues.begin() + xx);
 			shift++;
 		}
-	}
+	}*/
 	//for (int ii = i * sudoku._gridDim; ii < (i + 1) * sudoku._gridDim; ii++)
 	//{
 	//	for (int jj = j * sudoku._gridDim; jj < (j + 1) * sudoku._gridDim; jj++)
