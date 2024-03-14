@@ -4,12 +4,13 @@
 #include "GeneticAlgorithmStrategy.h"
 #include <cstdlib>
 #include <ctime>
-#include "vector"
+#include <set>
 
 GeneticAlgorithm::GeneticAlgorithm(const Sudoku& sudoku)
 {
 	_sudoku = Sudoku(sudoku);
 	_generation = new Sudoku[_generationSize];
+	_scores = new int[_generationSize];
 }
 
 void GeneticAlgorithm::FillRandomGrid(int i, int j, Sudoku& sudoku)
@@ -102,21 +103,84 @@ int GeneticAlgorithm::RateSolution(const Sudoku& sudoku)
 {
 	int score = 0;
 	for (int k = 0; k < sudoku._boardDim; k++)
-	{
 		score += CountDuplicatesRowColumn(sudoku, k, k);
-		std::cout << std::endl << score << std::endl;
-	}
 	return score;
 }
 
+void GeneticAlgorithm::Fitness()
+{
+	for (int k = 0; k < _generationSize; k++)
+	{
+		_scores[k] = RateSolution(_generation[k]);
+		std::cout << _scores[k] <<" ";
+	}
+}
 
+int GeneticAlgorithm::FindMaxBestScore()
+{
+	std::multiset<int, std::greater<int>> bestScores;
+
+	for (int k = 0; k < _selectedPC * _generationSize; k++)
+		bestScores.insert(_scores[k]);
+
+	for (int k = (int)(_selectedPC * _generationSize); k < _generationSize; k++)
+	{
+		if (_scores[k] < *bestScores.begin())
+		{
+			bestScores.erase(bestScores.begin());
+			bestScores.insert(_scores[k]);
+		}
+	}
+
+	return *bestScores.begin();
+}
+
+void GeneticAlgorithm::FindParentsIndexes(int score)
+{
+	_parentsIndexes.clear();
+	std::vector<int> _notBestIndexes;
+
+	for (int k = 0; k < _generationSize; k++)
+	{
+		if (_scores[k] <= score && _parentsIndexes.size() < _selectedPC * _generationSize)
+			_parentsIndexes.push_back(k);
+		else
+			_notBestIndexes.push_back(k);
+	}
+
+	for (int k = 0; k < _randomPC * _generationSize; k++)
+	{
+		int randomIndex = rand() % _notBestIndexes.size();
+		_parentsIndexes.push_back(_notBestIndexes[randomIndex]);
+		_notBestIndexes.erase(_notBestIndexes.begin() + randomIndex);
+	}
+
+}
+
+Sudoku GeneticAlgorithm::CreateChild(const Sudoku& father, const Sudoku& mother)
+{
+	return Sudoku();
+}
+
+
+void GeneticAlgorithm::GenerateGeneration()
+{
+	srand(time(NULL));
+	FindParentsIndexes(FindMaxBestScore());
+
+
+
+}
 
 Sudoku GeneticAlgorithm::Solve()
 {
 	GenerateFirstGeneration();
-	_generation[0].Print();
-	int score = RateSolution(_generation[0]);
-	_generation[0].Print();
-	std::cout << score << std::endl;
+
+	for (int k = 0; k < _maxIter; k++)
+	{
+		Fitness();
+		GenerateGeneration();
+	}
+
 	return _sudoku;
 }
