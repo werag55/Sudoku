@@ -6,6 +6,7 @@
 class GeneticAlgorithm
 {
 	Sudoku _sudoku;
+	Sudoku* _previousGenereation;
 	Sudoku* _generation;
 	std::vector<int> _parentsIndexes;
 	int* _scores;

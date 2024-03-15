@@ -5,6 +5,7 @@
 #include <cstdlib>
 #include <ctime>
 #include <set>
+#include <tuple> 
 
 GeneticAlgorithm::GeneticAlgorithm(const Sudoku& sudoku)
 {
@@ -110,10 +111,7 @@ int GeneticAlgorithm::RateSolution(const Sudoku& sudoku)
 void GeneticAlgorithm::Fitness()
 {
 	for (int k = 0; k < _generationSize; k++)
-	{
 		_scores[k] = RateSolution(_generation[k]);
-		std::cout << _scores[k] <<" ";
-	}
 }
 
 int GeneticAlgorithm::FindMaxBestScore()
@@ -159,16 +157,46 @@ void GeneticAlgorithm::FindParentsIndexes(int score)
 
 Sudoku GeneticAlgorithm::CreateChild(const Sudoku& father, const Sudoku& mother)
 {
-	return Sudoku();
-}
+	int fromMother = rand() % (father._boardDim - 1) + 1;
+
+	std::vector<std::tuple<int, int>> freeIndexes;
+	for (int i = 0; i < father._gridDim; i++)
+		for (int j = 0; j < father._gridDim; j++)
+			freeIndexes.push_back(std::make_tuple(i, j));
+
+	Sudoku child(father);
+
+	for (int k = 0; k < fromMother; k++)
+	{
+		int randomIndex = rand() % freeIndexes.size();
+		std::tuple<int, int> gridIndexes = freeIndexes[randomIndex];
+		freeIndexes.erase(freeIndexes.begin() + randomIndex);
+
+		int i = std::get<0>(gridIndexes);
+		int j = std::get<1>(gridIndexes);
+
+		for (int ii = i * child._gridDim; ii < (i + 1) * child._gridDim; ii++)
+			for (int jj = j * child._gridDim; jj < (j + 1) * child._gridDim; jj++)
+				child._sudokuBoard[child._boardDim * ii + jj] = mother._sudokuBoard[child._boardDim * ii + jj];
+	}
+
+	return child;
+} 
 
 
 void GeneticAlgorithm::GenerateGeneration()
 {
+	_previousGenereation = new Sudoku[_generationSize];
+	for (int k = 0; k < _generationSize; k++)
+		_previousGenereation[k] = Sudoku(_generation[k]);
+
 	srand(time(NULL));
 	FindParentsIndexes(FindMaxBestScore());
 
-
+	_previousGenereation[0].Print();
+	_previousGenereation[1].Print();
+	Sudoku child = CreateChild(_previousGenereation[0], _previousGenereation[1]);
+	child.Print();
 
 }
 
