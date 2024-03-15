@@ -29,7 +29,7 @@ private:
 	int FindMaxBestScore();
 	void FindParentsIndexes(int score);
 	Sudoku CreateChild(const Sudoku& father, const Sudoku& mother);
-	void CreateChildren(const Sudoku& father, const Sudoku& mother, int index);
+	void CreateChildren(const Sudoku& father, const Sudoku& mother, int startIndex);
 	void MutateSudoku(int index);
 	void MutatePopulation();
 	void GenerateGeneration();

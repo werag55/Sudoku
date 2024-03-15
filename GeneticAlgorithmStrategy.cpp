@@ -181,8 +181,16 @@ Sudoku GeneticAlgorithm::CreateChild(const Sudoku& father, const Sudoku& mother)
 	}
 
 	return child;
-} 
+}
 
+void GeneticAlgorithm::CreateChildren(const Sudoku& father, const Sudoku& mother, int startIndex)
+{
+	for (int k = 0; k < _children; k++)
+	{
+		_generation[k + startIndex] = CreateChild(father, mother);
+		_generation[k + startIndex].Print();
+	}
+}
 
 void GeneticAlgorithm::GenerateGeneration()
 {
@@ -193,10 +201,18 @@ void GeneticAlgorithm::GenerateGeneration()
 	srand(time(NULL));
 	FindParentsIndexes(FindMaxBestScore());
 
-	_previousGenereation[0].Print();
-	_previousGenereation[1].Print();
-	Sudoku child = CreateChild(_previousGenereation[0], _previousGenereation[1]);
-	child.Print();
+	for (int k = 0; k < _generationSize; k += _children)
+	{
+		int randomIndex = rand() % _parentsIndexes.size();
+		int fatherIndex = _parentsIndexes[randomIndex];
+		_parentsIndexes.erase(_parentsIndexes.begin() + randomIndex);
+
+		randomIndex = rand() % _parentsIndexes.size();
+		int motherIndex = _parentsIndexes[randomIndex];
+		_parentsIndexes.erase(_parentsIndexes.begin() + randomIndex);
+
+		CreateChildren(_previousGenereation[fatherIndex], _previousGenereation[motherIndex], k);
+	}
 
 }
 
