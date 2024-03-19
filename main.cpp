@@ -2,6 +2,7 @@
 
 #include "Sudoku.h"
 #include "PencilMarkStrategy.h"
+#include "BackTracingStrategy.h"
 
 int main(int argc, char* argv[])
 {
@@ -36,5 +37,13 @@ int main(int argc, char* argv[])
 
 	PencilMark pencilMark(sudoku);
 	Sudoku solved = pencilMark.Solve();
+
+	BackTracing BackTracing(sudoku);
+	Sudoku solvedBack=BackTracing.Solve();
+
+	
+
 	solved.Print();
+	sudoku.Print();
+	solvedBack.Print();
 }
