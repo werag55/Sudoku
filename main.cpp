@@ -1,8 +1,25 @@
 #include <iostream>
+#include <chrono>
 
 #include "Sudoku.h"
 #include "PencilMarkStrategy.h"
 #include "GeneticAlgorithmStrategy.h"
+
+void PrintDuration(std::chrono::microseconds duration) {
+	auto minutes = std::chrono::duration_cast<std::chrono::minutes>(duration);
+	duration -= minutes;
+	auto seconds = std::chrono::duration_cast<std::chrono::seconds>(duration);
+	duration -= seconds;
+	auto milliseconds = std::chrono::duration_cast<std::chrono::milliseconds>(duration);
+	duration -= milliseconds;
+	auto microseconds = std::chrono::duration_cast<std::chrono::microseconds>(duration);
+
+	std::cout << "Duration: "
+		<< minutes.count() << ":"
+		<< seconds.count() << ":"
+		<< milliseconds.count() << "."
+		<< microseconds.count() << std::endl;
+}
 
 int main(int argc, char* argv[])
 {
@@ -39,6 +56,12 @@ int main(int argc, char* argv[])
 	Sudoku solved = pencilMark.Solve();
 	solved.Print();*/
 
+	auto start = std::chrono::high_resolution_clock::now();
 	GeneticAlgorithm geneticAlgorithm(sudoku);
 	Sudoku solved = geneticAlgorithm.Solve();
+	auto stop = std::chrono::high_resolution_clock::now();
+	auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop - start);
+	//std::cout <<"Duration: " << duration.count() << std::endl;
+	PrintDuration(duration);
+	solved.Print();
 }

@@ -5,13 +5,31 @@
 #include <cstdlib>
 #include <ctime>
 #include <set>
-#include <tuple> 
 
 GeneticAlgorithm::GeneticAlgorithm(const Sudoku& sudoku)
 {
 	_sudoku = Sudoku(sudoku);
+	_previousGenereation = new Sudoku[_generationSize];
 	_generation = new Sudoku[_generationSize];
 	_scores = new int[_generationSize];
+
+	_notFixedIndexesByGrid = new std::vector<int>[sudoku._boardDim];
+	for (int i = 0; i < sudoku._gridDim; i++)
+	{
+		for (int j = 0; j < sudoku._gridDim; j++)
+		{
+			for (int ii = 0; ii < sudoku._gridDim; ii++)
+			{
+				for (int jj = 0; jj < sudoku._gridDim; jj++)
+				{
+					if (sudoku._sudokuBoard[(i * sudoku._gridDim + ii) * sudoku._boardDim + (j * sudoku._gridDim + jj)] == 0)
+						_notFixedIndexesByGrid[i * sudoku._gridDim + j].push_back
+							((i * sudoku._gridDim + ii) * sudoku._boardDim + (j * sudoku._gridDim + jj));
+				}
+			}
+		}
+	}
+
 }
 
 void GeneticAlgorithm::FillRandomGrid(int i, int j, Sudoku& sudoku)
@@ -110,8 +128,23 @@ int GeneticAlgorithm::RateSolution(const Sudoku& sudoku)
 
 void GeneticAlgorithm::Fitness()
 {
+	int minScore = INT_MAX;
 	for (int k = 0; k < _generationSize; k++)
+	{
 		_scores[k] = RateSolution(_generation[k]);
+		if (_scores[k] < minScore)
+		{
+			minScore = _scores[k];
+			_bestSudokuIndex = k;
+		}
+	}
+
+	if (_scores[_bestSudokuIndex] == _previousBestScore)
+		_bestScoreNotChangedSince++;
+	else
+		_bestScoreNotChangedSince == 0;
+
+	_previousBestScore = _scores[_bestSudokuIndex];
 }
 
 int GeneticAlgorithm::FindMaxBestScore()
@@ -186,10 +219,7 @@ Sudoku GeneticAlgorithm::CreateChild(const Sudoku& father, const Sudoku& mother)
 void GeneticAlgorithm::CreateChildren(const Sudoku& father, const Sudoku& mother, int startIndex)
 {
 	for (int k = 0; k < _children; k++)
-	{
 		_generation[k + startIndex] = CreateChild(father, mother);
-		_generation[k + startIndex].Print();
-	}
 }
 
 void GeneticAlgorithm::GenerateGeneration()
@@ -213,7 +243,50 @@ void GeneticAlgorithm::GenerateGeneration()
 
 		CreateChildren(_previousGenereation[fatherIndex], _previousGenereation[motherIndex], k);
 	}
+}
 
+void GeneticAlgorithm::SwapValues(Sudoku& sudoku, int index1, int index2)
+{
+	int temp = sudoku._sudokuBoard[index1];
+	sudoku._sudokuBoard[index1] = sudoku._sudokuBoard[index2];
+	sudoku._sudokuBoard[index2] = temp;
+}
+
+void GeneticAlgorithm::MutateSudoku(Sudoku& sudoku)
+{
+	int gridIndex = rand() % sudoku._boardDim;
+	//std::cout << "Sudoku before mutation of " << gridIndex << " grid\n";
+	//sudoku.Print();
+	
+	if (_notFixedIndexesByGrid[gridIndex].size() > 1)
+	{
+		int randomIndex1 = rand() % _notFixedIndexesByGrid[gridIndex].size();
+		int randomIndex2 = rand() % (_notFixedIndexesByGrid[gridIndex].size() - 1);
+
+		if (randomIndex2 >= randomIndex1)
+			randomIndex2++;
+
+		//std::cout << "Swaping " << _notFixedIndexesByGrid[gridIndex][randomIndex1] << " and " << _notFixedIndexesByGrid[gridIndex][randomIndex2] << std::endl;
+		SwapValues(sudoku, _notFixedIndexesByGrid[gridIndex][randomIndex1], _notFixedIndexesByGrid[gridIndex][randomIndex2]);
+	}
+	   
+	//sudoku.Print();
+}
+
+void GeneticAlgorithm::MutatePopulation()
+{
+	std::vector<int> _notMutatedIndexes;
+	for (int k = 0; k < _generationSize; k++)
+		_notMutatedIndexes.push_back(k);
+
+	srand(time(NULL));
+
+	for (int k = 0; k < _mutationPC * _generationSize; k++)
+	{
+		int randomIndex = rand() % _notMutatedIndexes.size();
+		MutateSudoku(_generation[_notMutatedIndexes[randomIndex]]);
+		_notMutatedIndexes.erase(_notMutatedIndexes.begin() + randomIndex);
+	}
 }
 
 Sudoku GeneticAlgorithm::Solve()
@@ -222,9 +295,19 @@ Sudoku GeneticAlgorithm::Solve()
 
 	for (int k = 0; k < _maxIter; k++)
 	{
+		if (_bestScoreNotChangedSince == _restartAfter)
+		{
+			GenerateFirstGeneration();
+			_bestScoreNotChangedSince = 0;
+			std::cout << "Best score: " <<_scores[_bestSudokuIndex] <<" Restarted\n";
+		}
 		Fitness();
+		if (_scores[_bestSudokuIndex] == 0)
+			break;
 		GenerateGeneration();
+		MutatePopulation();
 	}
 
-	return _sudoku;
+	std::cout << "Score: " << _scores[_bestSudokuIndex] << "\n";
+	return _generation[_bestSudokuIndex];
 }
