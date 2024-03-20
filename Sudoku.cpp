@@ -1,9 +1,17 @@
 #include "Sudoku.h"
 #include <iostream>
 
+/// <summary>
+/// Default constructor for Sudoku. Initializes grid dimensions and sudoku board to null.
+/// </summary>
 Sudoku::Sudoku() : 
 	_gridDim(0), _boardDim(0), _sudokuBoard(nullptr) {}
 
+/// <summary>
+/// Constructor for Sudoku with specified grid dimensions and values.
+/// </summary>
+/// <param name="gridDim">The dimension of the grid.</param>
+/// <param name="values">An array containing the initial values of the sudoku puzzle.</param>
 Sudoku::Sudoku(int gridDim, int* values)
 {
 	_gridDim = gridDim;
@@ -15,6 +23,10 @@ Sudoku::Sudoku(int gridDim, int* values)
 		_sudokuBoard[i] = values[i];
 }
 
+/// <summary>
+/// Copy constructor for Sudoku.
+/// </summary>
+/// <param name="other">The Sudoku object to copy.</param>
 Sudoku::Sudoku(const Sudoku& other) : 
 	_gridDim(other._gridDim), _boardDim(other._boardDim) 
 {
@@ -23,6 +35,9 @@ Sudoku::Sudoku(const Sudoku& other) :
 		_sudokuBoard[i] = other._sudokuBoard[i];
 }
 
+/// <summary>
+/// Prints the sudoku puzzle to the console.
+/// </summary>
 void Sudoku::Print()
 {
 	for (int i = 0; i < _boardDim; i++)
