@@ -7,6 +7,7 @@
 #include "BackTracingStrategy.h"
 
 #include "GeneticAlgorithmStrategy.h"
+#include "GeneticAlgorithmBuilder.h"
 
 void PrintDuration(std::chrono::microseconds duration) {
 	auto minutes = std::chrono::duration_cast<std::chrono::minutes>(duration);
@@ -90,7 +91,9 @@ int main(int argc, char* argv[])
 	BackTracing BackTracing(sudoku);
 	Sudoku solvedBack = BackTracing.Solve();
 	auto start = std::chrono::high_resolution_clock::now();
-	GeneticAlgorithm geneticAlgorithm(sudoku2);
+	
+	GeneticAlgorithmBuilder geneticbuilder = GeneticAlgorithmBuilder(sudoku2);
+	GeneticAlgorithm geneticAlgorithm = geneticbuilder.generationSize(1000).maxIter(1000).build();
 	Sudoku solved = geneticAlgorithm.Solve();
 	auto stop = std::chrono::high_resolution_clock::now();
 	auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop - start);

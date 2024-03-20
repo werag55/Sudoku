@@ -10,9 +10,18 @@
 /// Constructs a GeneticAlgorithm object.
 /// </summary>
 /// <param name="sudoku">The Sudoku puzzle to be solved.</param>
-GeneticAlgorithm::GeneticAlgorithm(const Sudoku& sudoku)
+GeneticAlgorithm::GeneticAlgorithm(const Sudoku& sudoku, int generationSize, double selectedPC, double randomPC, int children, double mutationPC, int maxIter, int restartAfter)
 {
-	_sudoku = Sudoku(sudoku);
+	// Przypisanie wartoœci do pól klasy z argumentów konstruktora
+	_sudoku = Sudoku(sudoku); // Tworzy kopiê sudoku
+	_generationSize = generationSize;
+	_selectedPC = selectedPC;
+	_randomPC = randomPC;
+	_children = children;
+	_mutationPC = mutationPC;
+	_maxIter = maxIter;
+	_restartAfter = restartAfter;
+
 	_previousGenereation = new Sudoku[_generationSize];
 	_generation = new Sudoku[_generationSize];
 	_scores = new int[_generationSize];

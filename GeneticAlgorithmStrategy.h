@@ -29,7 +29,7 @@ class GeneticAlgorithm
 	int _bestSudokuIndex = 0;					// the index of the best solution in the _generation
 	int _bestScoreNotChangedSince = 0;			// the number of iterations since the best score remained unchanged
 public:
-	GeneticAlgorithm(const Sudoku& sudoku);
+	GeneticAlgorithm(const Sudoku& sudoku, int generationSize, double selectedPC, double randomPC, int children, double mutationPC, int maxIter, int restartAfter);
 	Sudoku Solve();
 
 private:
