@@ -128,11 +128,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="GeneticAlgorithmStrategy.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="PencilMarkStrategy.cpp" />
     <ClCompile Include="Sudoku.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="GeneticAlgorithmStrategy.h" />
     <ClInclude Include="PencilMarkStrategy.h" />
     <ClInclude Include="SolvingStrategy.h" />
     <ClInclude Include="Sudoku.h" />
