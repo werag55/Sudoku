@@ -80,14 +80,15 @@ int main(int argc, char* argv[])
 	Sudoku solved = pencilMark.Solve();
 
 
-	BackTracing BackTracing(sudoku);
-	Sudoku solvedBack=BackTracing.Solve();
+	
 
 	
 
 
 	solved.Print();*/
 
+	BackTracing BackTracing(sudoku);
+	Sudoku solvedBack = BackTracing.Solve();
 	auto start = std::chrono::high_resolution_clock::now();
 	GeneticAlgorithm geneticAlgorithm(sudoku2);
 	Sudoku solved = geneticAlgorithm.Solve();
