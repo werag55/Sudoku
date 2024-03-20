@@ -3,8 +3,9 @@
 
 class PencilMark
 {
-	Sudoku _sudoku;
-	bool** _pencilMarks;
+	Sudoku _sudoku;      // the sudoku puzzle that is being solved 
+	bool** _pencilMarks; // an array that for each field on the sudoku board stores an array that 
+						 // for every possible value determines if it is possible to placed it there
 
 public:
 	PencilMark(const Sudoku& sudoku);
