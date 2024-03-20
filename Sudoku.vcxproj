@@ -53,7 +53,9 @@
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+
   <ImportGroup Label="ExtensionSettings" />
+
   <ImportGroup Label="Shared">
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -126,17 +128,28 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+
+    <ClCompile Include="BackTracingStrategy.cpp" />
+
     <ClCompile Include="GeneticAlgorithmStrategy.cpp" />
+
     <ClCompile Include="main.cpp" />
     <ClCompile Include="PencilMarkStrategy.cpp" />
     <ClCompile Include="Sudoku.cpp" />
   </ItemGroup>
   <ItemGroup>
+
+    <ClInclude Include="BackTracingStrategy.h" />
+
     <ClInclude Include="GeneticAlgorithmStrategy.h" />
+
     <ClInclude Include="PencilMarkStrategy.h" />
     <ClInclude Include="SolvingStrategy.h" />
     <ClInclude Include="Sudoku.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+
+
   <ImportGroup Label="ExtensionTargets" />
+
 </Project>

@@ -3,6 +3,9 @@
 
 #include "Sudoku.h"
 #include "PencilMarkStrategy.h"
+
+#include "BackTracingStrategy.h"
+
 #include "GeneticAlgorithmStrategy.h"
 
 void PrintDuration(std::chrono::microseconds duration) {
@@ -20,6 +23,7 @@ void PrintDuration(std::chrono::microseconds duration) {
 		<< milliseconds.count() << "."
 		<< microseconds.count() << std::endl;
 }
+
 
 int main(int argc, char* argv[])
 {
@@ -74,6 +78,14 @@ int main(int argc, char* argv[])
 
 	/*PencilMark pencilMark(sudoku);
 	Sudoku solved = pencilMark.Solve();
+
+
+	BackTracing BackTracing(sudoku);
+	Sudoku solvedBack=BackTracing.Solve();
+
+	
+
+
 	solved.Print();*/
 
 	auto start = std::chrono::high_resolution_clock::now();
@@ -83,5 +95,8 @@ int main(int argc, char* argv[])
 	auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop - start);
 	//std::cout <<"Duration: " << duration.count() << std::endl;
 	PrintDuration(duration);
+
 	solved.Print();
+	sudoku.Print();
+	solvedBack.Print();
 }
