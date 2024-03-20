@@ -4,6 +4,8 @@
 class BackTracing
 {
 	Sudoku _sudoku;
+
+	// hash table use to check duplicates in row column or grid 
 	bool* HashTable;
 
 public:
