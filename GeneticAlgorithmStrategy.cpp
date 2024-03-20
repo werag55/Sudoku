@@ -396,7 +396,9 @@ Sudoku GeneticAlgorithm::Solve()
 			break;
 
 		GenerateGeneration();
-		MutatePopulation();
+
+		if (!_evolutionary)
+			MutatePopulation();
 	}
 
 	std::cout << "Solved after " << _restartCount << " restarts (" << _restartCount * _restartAfter << " iterations) and "

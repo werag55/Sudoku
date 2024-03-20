@@ -14,7 +14,9 @@ class GeneticAlgorithm
 	int* _scores;								// the fitness scores of sudoku puzzles in the current generation 
 												// (at the i-th index in _scores there is the score for the sudoku puzzle 
 												// at the i-th index in _generation)
-	int _generationSize = 10000;					// the size of each generation
+	bool _evolutionary = false;					// indicates whether the approach should be an evolutionary algorithm 
+												// (i.e. a genetic algorithm without mutations)
+	int _generationSize = 10000;			    // the size of each generation
 	double _selectedPC = 0.25;					// the percentage of the best solutions to be selected for crossover
 	double _randomPC = 0.25;					// the percentage of randomly selected solutions for crossover
 	int _children = 4;							// the number of children to be generated from each parent pair
