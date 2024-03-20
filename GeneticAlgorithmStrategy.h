@@ -6,27 +6,32 @@
 
 class GeneticAlgorithm
 {
-	Sudoku _sudoku;
-	Sudoku* _previousGenereation;
-	Sudoku* _generation;
-	std::vector<int> _parentsIndexes;
-	std::vector<int>* _notFixedIndexesByGrid;
-	int* _scores;
-	int _generationSize = 5000;
-	double _selectedPC = 0.25;
-	double _randomPC = 0.25;
-	int _children = 4;
-	double _mutationPC = 0.25;
-	int _maxIter = 650;
-	int _restartAfter = 30;
-	int _previousBestScore = 0;
-	int _bestSudokuIndex = 0;
-	int _bestScoreNotChangedSince = 0;
+	Sudoku _sudoku;								// the original sudoku puzzle
+	Sudoku* _previousGenereation;				// the previous generation of sudoku puzzles
+	Sudoku* _generation;						// the current generation of sudoku puzzles
+	std::vector<int> _parentsIndexes;			// the indexes of parent sudoku puzzles in _generation array
+	std::vector<int>* _notFixedIndexesByGrid;	// the indexes of unfixed cells of the orginal sudoku puzzle by grids
+	int* _scores;								// the fitness scores of sudoku puzzles in the current generation 
+												// (at the i-th index in _scores there is the score for the sudoku puzzle 
+												// at the i-th index in _generation)
+	int _generationSize = 10000;					// the size of each generation
+	double _selectedPC = 0.25;					// the percentage of the best solutions to be selected for crossover
+	double _randomPC = 0.25;					// the percentage of randomly selected solutions for crossover
+	int _children = 4;							// the number of children to be generated from each parent pair
+	double _mutationPC = 0.25;					// the percentage of the population to be mutated
+	int _maxIter = 5000;						// the maximum number of iterations for the genetic algorithm
+	int _restartAfter = 30;						// the number of generations after which the algorithm restarts 
+												// if the best score remains unchanged
+	int _restartCount = 0;						// the counter for restaring the algorithm
+	int _previousBestScore = 0;					// the best score from the previous iteration
+	int _bestSudokuIndex = 0;					// the index of the best solution in the _generation
+	int _bestScoreNotChangedSince = 0;			// the number of iterations since the best score remained unchanged
 public:
 	GeneticAlgorithm(const Sudoku& sudoku);
 	Sudoku Solve();
 
 private:
+	void FindNotFixedIndexes();
 	void FillRandomGrid(int i, int j, Sudoku& sudoku);
 	void FillRandom(Sudoku& sudoku);
 	void GenerateFirstGeneration();
