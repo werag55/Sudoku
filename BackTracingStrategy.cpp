@@ -81,10 +81,10 @@ bool BackTracing::CheckColumn(int j)
 bool BackTracing::CheckGrid(int indexI, int indexJ)
 {
 	std::fill(HashTable, HashTable + _sudoku._boardDim + 1, false);
-
+	
 	int index = _sudoku._boardDim * indexI + indexJ;
-	int startI = (indexI / _sudoku._gridDim) * _sudoku._gridDim;
-	int startJ = (indexJ / _sudoku._gridDim) * _sudoku._gridDim;
+	int startI = (indexI/3)*3;
+	int startJ = (indexJ%3)*3;
 	for (int i = startI; i < startI + _sudoku._gridDim; i++)
 	{
 		for (int j = startJ; j < startJ + _sudoku._gridDim; j++)
@@ -114,7 +114,7 @@ bool BackTracing::IsValid()
 	for (int i = 0; i < _sudoku._boardDim; i++)
 	{
 		//popraw na board dim pozniej
-		if (!CheckRow(i) || !CheckColumn(i) || !CheckGrid(i % 3 * 3, i / 3 * 3))
+		if (!CheckRow(i) || !CheckColumn(i) || !CheckGrid(i , i ))
 		{
 			return false;
 		}

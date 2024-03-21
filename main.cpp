@@ -93,7 +93,7 @@ int main(int argc, char* argv[])
 	auto start = std::chrono::high_resolution_clock::now();
 	
 	GeneticAlgorithmBuilder geneticbuilder = GeneticAlgorithmBuilder(sudoku2);
-	GeneticAlgorithm geneticAlgorithm = geneticbuilder.generationSize(1000).maxIter(1000).build();
+	GeneticAlgorithm geneticAlgorithm = geneticbuilder.generationSize(1000).maxIter(1000).restartAfter(100).build();
 	Sudoku solved = geneticAlgorithm.Solve();
 	auto stop = std::chrono::high_resolution_clock::now();
 	auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop - start);

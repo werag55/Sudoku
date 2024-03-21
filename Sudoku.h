@@ -8,8 +8,11 @@ public:
 
 	int* _sudokuBoard;  // 1D array representation of the sudoku puzzle
 
+
 	Sudoku();
 	Sudoku(int gridDim, int* sudokuBoard);
 	Sudoku(const Sudoku& other);
 	void Print();
+	int WhichGrid(int index);  // which grid is it?
+	
 };

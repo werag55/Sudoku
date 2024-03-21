@@ -32,22 +32,27 @@ GeneticAlgorithm::GeneticAlgorithm(const Sudoku& sudoku, int generationSize, dou
 
 void GeneticAlgorithm::FindNotFixedIndexes()
 {
-	for (int i = 0; i < _sudoku._gridDim; i++) // iterate through row indexes of grids 
-	{
-		for (int j = 0; j < _sudoku._gridDim; j++) // iterate through column indexes of grids 
-		{
-			for (int ii = 0; ii < _sudoku._gridDim; ii++) // iterate through row indexes of the values in the grid
-			{
-				for (int jj = 0; jj < _sudoku._gridDim; jj++) // iterate through column indexes of the values in the grid
-				{
-					if (_sudoku._sudokuBoard[(i * _sudoku._gridDim + ii) * _sudoku._boardDim + (j * _sudoku._gridDim + jj)] == 0)
-						_notFixedIndexesByGrid[i * _sudoku._gridDim + j].push_back
-							((i * _sudoku._gridDim + ii) * _sudoku._boardDim + (j * _sudoku._gridDim + jj)); // index of the unfixed value
-																											 // in sudoku board
-				}
-			}
-		}
-	}
+	//for (int i = 0; i < _sudoku._gridDim; i++) // iterate through row indexes of grids 
+	//{
+	//	for (int j = 0; j < _sudoku._gridDim; j++) // iterate through column indexes of grids 
+	//	{
+	//		for (int ii = 0; ii < _sudoku._gridDim; ii++) // iterate through row indexes of the values in the grid
+	//		{
+	//			for (int jj = 0; jj < _sudoku._gridDim; jj++) // iterate through column indexes of the values in the grid
+	//			{
+	//				if (_sudoku._sudokuBoard[(i * _sudoku._gridDim + ii) * _sudoku._boardDim + (j * _sudoku._gridDim + jj)] == 0)
+	//					_notFixedIndexesByGrid[i * _sudoku._gridDim + j].push_back
+	//						((i * _sudoku._gridDim + ii) * _sudoku._boardDim + (j * _sudoku._gridDim + jj)); // index of the unfixed value
+	//																										 // in sudoku board
+	//			}
+	//		}
+	//	}
+	//}
+
+
+
+
+
 }
 
 /// <summary>

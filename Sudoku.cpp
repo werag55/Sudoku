@@ -64,3 +64,10 @@ void Sudoku::Print()
 	}
 	std::cout << std::endl << std::endl;
 }
+
+
+
+int Sudoku::WhichGrid(int index)
+{
+	return 1;
+}
