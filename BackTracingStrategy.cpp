@@ -1,5 +1,5 @@
 #include "BackTracingStrategy.h"
-#include <algorithm> 
+#include <algorithm>
 /// <summary>
 ///  Constructor of Backtracking strategy
 /// </summary>
@@ -11,10 +11,8 @@ BackTracing::BackTracing(const Sudoku& sudoku)
 	_sudoku = Sudoku(sudoku);
 
 	// tablica haszujaca do sprawdzania czy sie powtarzaja elementy O(n)
-	HashTable = new bool[sudoku._boardDim+1];
+	HashTable = new bool[sudoku._boardDim + 1];
 }
-
-
 
 /// <summary>
 /// Check for duplicates in row without 0
@@ -37,9 +35,7 @@ bool BackTracing::CheckRow(int i)
 				return false;
 			}
 			HashTable[val] = true;
-
 		}
-			
 	}
 	return true;
 }
@@ -65,7 +61,6 @@ bool BackTracing::CheckColumn(int j)
 				return false;
 			}
 			HashTable[val] = true;
-
 		}
 	}
 	return true;
@@ -81,10 +76,10 @@ bool BackTracing::CheckColumn(int j)
 bool BackTracing::CheckGrid(int indexI, int indexJ)
 {
 	std::fill(HashTable, HashTable + _sudoku._boardDim + 1, false);
-	
+
 	int index = _sudoku._boardDim * indexI + indexJ;
-	int startI = (indexI/3)*3;
-	int startJ = (indexJ%3)*3;
+	int startI = (indexI / 3) * 3;
+	int startJ = (indexJ % 3) * 3;
 	for (int i = startI; i < startI + _sudoku._gridDim; i++)
 	{
 		for (int j = startJ; j < startJ + _sudoku._gridDim; j++)
@@ -97,7 +92,6 @@ bool BackTracing::CheckGrid(int indexI, int indexJ)
 					return false;
 				}
 				HashTable[val] = true;
-
 			}
 		}
 	}
@@ -114,14 +108,13 @@ bool BackTracing::IsValid()
 	for (int i = 0; i < _sudoku._boardDim; i++)
 	{
 		//popraw na board dim pozniej
-		if (!CheckRow(i) || !CheckColumn(i) || !CheckGrid(i , i ))
+		if (!CheckRow(i) || !CheckColumn(i) || !CheckGrid(i, i))
 		{
 			return false;
 		}
 	}
 	return true;
 }
-
 
 /// <summary>
 /// Wraping Function
@@ -133,7 +126,6 @@ Sudoku BackTracing::Solve()
 {
 	bool result = Solving(0, 0);
 	return _sudoku;
-
 }
 /// <summary>
 /// Main Backtracking Function
@@ -150,7 +142,7 @@ bool BackTracing::Solving(int i, int j)
 	// column is 9, go to next row
 	else if (j == 9)
 		return Solving(i + 1, 0);
-	// if there is already number go to next 
+	// if there is already number go to next
 	else if (_sudoku._sudokuBoard[i * _sudoku._boardDim + j] != 0)
 	{
 		return Solving(i, j + 1);

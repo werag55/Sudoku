@@ -25,21 +25,19 @@ void PrintDuration(std::chrono::microseconds duration) {
 		<< microseconds.count() << std::endl;
 }
 
-
 int main(int argc, char* argv[])
 {
-
 	srand(static_cast<unsigned int>(time(nullptr)));
 
-	Sudoku sudoku = Sudoku(3, new int[81] {0, 8, 0, 0, 0, 0, 0, 9, 0, 
-										   0, 0, 7, 5, 0, 2, 8, 0, 0, 
-										   6, 0, 0, 8, 0, 7, 0, 0, 5, 
-										   3, 7, 0, 0, 8, 0, 0, 5, 1, 
-										   2, 0, 0, 0, 0, 0, 0, 0, 8, 
-										   9, 5, 0, 0, 4, 0, 0, 3, 2, 
-										   8, 0, 0, 1, 0, 4, 0, 0, 9, 
-										   0, 0, 1, 9, 0, 3, 6, 0, 0,
-										   0, 4, 0, 0, 0, 0, 0, 2, 0, });
+	Sudoku sudoku = Sudoku(3, new int[81] {0, 8, 0, 0, 0, 0, 0, 9, 0,
+		0, 0, 7, 5, 0, 2, 8, 0, 0,
+		6, 0, 0, 8, 0, 7, 0, 0, 5,
+		3, 7, 0, 0, 8, 0, 0, 5, 1,
+		2, 0, 0, 0, 0, 0, 0, 0, 8,
+		9, 5, 0, 0, 4, 0, 0, 3, 2,
+		8, 0, 0, 1, 0, 4, 0, 0, 9,
+		0, 0, 1, 9, 0, 3, 6, 0, 0,
+		0, 4, 0, 0, 0, 0, 0, 2, 0, });
 
 	Sudoku sudoku3 = Sudoku(3, new int[81] {0, 0, 6, 0, 0, 0, 0, 0, 0,
 		0, 8, 0, 0, 5, 4, 2, 0, 0,
@@ -52,14 +50,14 @@ int main(int argc, char* argv[])
 		0, 0, 8, 3, 0, 0, 5, 0, 2, });
 
 	Sudoku sudoku2 = Sudoku(3, new int[81] {0, 0, 2, 0, 0, 0, 0, 0, 0,
-											0, 0, 3, 0, 1, 0, 0, 0, 6,
-											0, 4, 0, 0, 2, 0, 0, 3, 0,
-											1, 0, 0, 0, 0, 3, 0, 0, 9,
-											0, 0, 5, 0, 0, 0, 4, 0, 0,
-											2, 0, 0, 6, 0, 0, 0, 0, 8,
-											0, 9, 0, 0, 7, 0, 0, 4, 0,
-											7, 0, 0, 0, 8, 0, 5, 0, 0,
-											0, 0, 0, 0, 0, 0, 3, 0, 0, });
+		0, 0, 3, 0, 1, 0, 0, 0, 6,
+		0, 4, 0, 0, 2, 0, 0, 3, 0,
+		1, 0, 0, 0, 0, 3, 0, 0, 9,
+		0, 0, 5, 0, 0, 0, 4, 0, 0,
+		2, 0, 0, 6, 0, 0, 0, 0, 8,
+		0, 9, 0, 0, 7, 0, 0, 4, 0,
+		7, 0, 0, 0, 8, 0, 5, 0, 0,
+		0, 0, 0, 0, 0, 0, 3, 0, 0, });
 
 	//{0, 0, 0, 0, 0, 0, 0, 0, 0,
 	//0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -83,19 +81,12 @@ int main(int argc, char* argv[])
 	/*PencilMark pencilMark(sudoku);
 	Sudoku solved = pencilMark.Solve();
 
-
-	
-
-	
-
-
 	solved.Print();*/
 
 	/*std::cout<<Sudoku::WhichGrid(10);
 	std::cout<<Sudoku::WhichGrid(14);
 	std::cout<<Sudoku::WhichGrid(8);
 	std::cout<<Sudoku::WhichGrid(57);*/
-
 
 	for (int i = 0; i < 9; i++)
 	{
@@ -105,7 +96,7 @@ int main(int argc, char* argv[])
 	BackTracing BackTracing(sudoku);
 	Sudoku solvedBack = BackTracing.Solve();
 	auto start = std::chrono::high_resolution_clock::now();
-	
+
 	GeneticAlgorithmBuilder geneticbuilder = GeneticAlgorithmBuilder(sudoku);
 	// builderem wybierz strategie i inne parametry
 	/*GeneticAlgorithm geneticAlgorithm = geneticbuilder.generationSize(10000).maxIter(10000).restartAfter(100).

@@ -16,5 +16,4 @@ public:
 	Sudoku(const Sudoku& other);
 	void Print();
 	static int WhichGrid(int index);  // which grid is it?
-	
 };

@@ -3,15 +3,15 @@
 
 class PencilMark
 {
-	Sudoku _sudoku;      // the sudoku puzzle that is being solved 
-	bool** _pencilMarks; // an array that for each field on the sudoku board stores an array that 
-						 // for every possible value determines if it is possible to placed it there
+	Sudoku _sudoku;      // the sudoku puzzle that is being solved
+	bool** _pencilMarks; // an array that for each field on the sudoku board stores an array that
+	// for every possible value determines if it is possible to placed it there
 
 public:
 	PencilMark(const Sudoku& sudoku);
 	Sudoku Solve();
 
-private: 
+private:
 	int CountFixedValues();
 	void CheckRow(int i, int index);
 	void CheckColumn(int j, int index);

@@ -82,7 +82,7 @@ void PencilMark::CheckGrid(int indexI, int indexJ)
 			int val = _sudoku._sudokuBoard[_sudoku._boardDim * i + j];
 			if (val != 0)
 				_pencilMarks[index][val - 1] = false;
-		}	
+		}
 	}
 }
 

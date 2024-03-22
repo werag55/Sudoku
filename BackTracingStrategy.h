@@ -5,16 +5,15 @@ class BackTracing
 {
 	Sudoku _sudoku;
 
-	// hash table use to check duplicates in row column or grid 
+	// hash table use to check duplicates in row column or grid
 	bool* HashTable;
 
 public:
 	BackTracing(const Sudoku& sudoku);
 	Sudoku Solve();
-	
 
 private:
-	
+
 	bool CheckRow(int i);
 	bool CheckColumn(int j);
 	bool CheckGrid(int indexI, int indexJ);

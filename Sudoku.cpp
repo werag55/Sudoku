@@ -4,7 +4,7 @@
 /// <summary>
 /// Default constructor for Sudoku. Initializes grid dimensions and sudoku board to null.
 /// </summary>
-Sudoku::Sudoku() : 
+Sudoku::Sudoku() :
 	_gridDim(0), _boardDim(0), _sudokuBoard(nullptr) {}
 
 /// <summary>
@@ -18,7 +18,6 @@ Sudoku::Sudoku(int gridDim, int* values)
 	_boardDim = _gridDim * _gridDim;
 
 	_IndexesByGrid = new std::vector<int>[_boardDim];
-	
 
 	// inicjalizacja indeksow
 	for (int i = 0; i < _boardDim * _boardDim; i++)
@@ -36,12 +35,9 @@ Sudoku::Sudoku(int gridDim, int* values)
 /// Copy constructor for Sudoku.
 /// </summary>
 /// <param name="other">The Sudoku object to copy.</param>
-Sudoku::Sudoku(const Sudoku& other) : 
-	_gridDim(other._gridDim), _boardDim(other._boardDim) 
+Sudoku::Sudoku(const Sudoku& other) :
+	_gridDim(other._gridDim), _boardDim(other._boardDim)
 {
-	
-
-
 	_IndexesByGrid = other._IndexesByGrid;
 
 	_sudokuBoard = new int[_boardDim * _boardDim];
@@ -79,20 +75,17 @@ void Sudoku::Print()
 	std::cout << std::endl << std::endl;
 }
 
-
 /// <summary>
 ///  Index of Grid base on index
 /// </summary>
 /// <param name="index"></param>
 /// <returns></returns>
- int Sudoku::WhichGrid(int index)
+int Sudoku::WhichGrid(int index)
 {
-
-	int i = (index / 9) /3;
-	int j = (index % 9) /3;
+	int i = (index / 9) / 3;
+	int j = (index % 9) / 3;
 
 	int grid = i * 3 + j;
 
 	return grid;
-
 }

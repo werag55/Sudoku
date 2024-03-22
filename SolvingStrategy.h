@@ -8,5 +8,4 @@ protected:
 
 public:
 	virtual void Solve();
-	
 };
