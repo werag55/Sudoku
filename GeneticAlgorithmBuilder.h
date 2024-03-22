@@ -4,13 +4,14 @@
 class GeneticAlgorithmBuilder {
 private:
     Sudoku _sudoku;
-    int _generationSize = 1000;
+    int _generationSize = 10000;
     double _selectedPC = 0.25;
     double _randomPC = 0.25;
     int _children = 4;
     double _mutationPC = 0.25;
     int _maxIter = 5000;
-    int _restartAfter = 40;
+    int _restartAfter = 30;
+    GeneticAlgorithm::ParentSelectStrategy _selectStrategy = GeneticAlgorithm::ParentSelectStrategy::RankAndRandom;
 
 public:
 
@@ -22,6 +23,10 @@ public:
         return *this;
     }
 
+    GeneticAlgorithmBuilder& selectStrategy(GeneticAlgorithm::ParentSelectStrategy selectStrategy) {
+        _selectStrategy = selectStrategy;
+        return *this;
+    }
 
     GeneticAlgorithmBuilder& selectedPC(double selectedPC) {
         _selectedPC = selectedPC;
@@ -61,6 +66,6 @@ public:
 
     GeneticAlgorithm build() {
 
-        return GeneticAlgorithm(_sudoku, _generationSize, _selectedPC, _randomPC, _children, _mutationPC, _maxIter, _restartAfter);
+        return GeneticAlgorithm(_sudoku, _generationSize, _selectedPC, _randomPC, _children, _mutationPC, _maxIter, _restartAfter,_selectStrategy);
     }
 };

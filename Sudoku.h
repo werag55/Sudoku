@@ -1,4 +1,5 @@
 #pragma once
+#include <vector>
 
 class Sudoku
 {
@@ -8,11 +9,12 @@ public:
 
 	int* _sudokuBoard;  // 1D array representation of the sudoku puzzle
 
+	std::vector<int>* _IndexesByGrid; // tablice indeksów znajdujacych sie w danym gridzie
 
 	Sudoku();
 	Sudoku(int gridDim, int* sudokuBoard);
 	Sudoku(const Sudoku& other);
 	void Print();
-	int WhichGrid(int index);  // which grid is it?
+	static int WhichGrid(int index);  // which grid is it?
 	
 };

@@ -5,12 +5,16 @@
 #include <cstdlib>
 #include <ctime>
 #include <set>
+#include <algorithm>
+#include <algorithm>
+#include <random>
 
+std::mt19937 gen(std::random_device{}());
 /// <summary>
 /// Constructs a GeneticAlgorithm object.
 /// </summary>
 /// <param name="sudoku">The Sudoku puzzle to be solved.</param>
-GeneticAlgorithm::GeneticAlgorithm(const Sudoku& sudoku, int generationSize, double selectedPC, double randomPC, int children, double mutationPC, int maxIter, int restartAfter)
+GeneticAlgorithm::GeneticAlgorithm(const Sudoku& sudoku, int generationSize, double selectedPC, double randomPC, int children, double mutationPC, int maxIter, int restartAfter,ParentSelectStrategy selectStrategy)
 {
 	// Przypisanie wartoœci do pól klasy z argumentów konstruktora
 	_sudoku = Sudoku(sudoku); // Tworzy kopiê sudoku
@@ -21,11 +25,13 @@ GeneticAlgorithm::GeneticAlgorithm(const Sudoku& sudoku, int generationSize, dou
 	_mutationPC = mutationPC;
 	_maxIter = maxIter;
 	_restartAfter = restartAfter;
-
+	_selectStrategy = selectStrategy;
 	_previousGenereation = new Sudoku[_generationSize];
 	_generation = new Sudoku[_generationSize];
 	_scores = new int[_generationSize];
 
+	_propabilityRoulette = new double[_generationSize];
+	_comulatedPropability = new double[_generationSize];
 	_notFixedIndexesByGrid = new std::vector<int>[sudoku._boardDim];
 	FindNotFixedIndexes();
 }
@@ -49,7 +55,13 @@ void GeneticAlgorithm::FindNotFixedIndexes()
 	//	}
 	//}
 
-
+	for (int i = 0; i < _sudoku._boardDim * _sudoku._boardDim; i++)
+	{
+		if (_sudoku._sudokuBoard[i] == 0)
+		{
+			_notFixedIndexesByGrid[Sudoku::WhichGrid(i)].push_back(i);
+		}
+	}
 
 
 
@@ -61,22 +73,31 @@ void GeneticAlgorithm::FindNotFixedIndexes()
 /// <param name="i">Row index of the grid.</param>
 /// <param name="j">Column index of the grid.</param>
 /// <param name="sudoku">The Sudoku puzzle to fill.</param>
-void GeneticAlgorithm::FillRandomGrid(int i, int j, Sudoku& sudoku)
+void GeneticAlgorithm::FillRandomGrid(int i,int j, Sudoku& sudoku)
 {
 
 	bool* takenValues = new bool[sudoku._boardDim];
-	for (int ii = 0; ii < sudoku._boardDim; ii++)
-		takenValues[ii] = false;
+	/*for (int ii = 0; ii < sudoku._boardDim; ii++)
+		takenValues[ii] = false; */ 
+      std::fill(takenValues, takenValues + sudoku._boardDim, false);
 
-	// fixed values
-	for (int ii = i * sudoku._gridDim; ii < (i + 1) * sudoku._gridDim; ii++)
+	/* fixed values*/
+	//for (int ii = i * sudoku._gridDim; ii < (i + 1) * sudoku._gridDim; ii++)
+	//{
+	//	for (int jj = j * sudoku._gridDim; jj < (j + 1) * sudoku._gridDim; jj++)
+	//	{
+	//		int val = sudoku._sudokuBoard[_sudoku._boardDim * ii + jj];
+	//		if (val != 0)
+	//			takenValues[val - 1] = true;
+	//	}
+	//}
+
+
+	for (int ii = 0; ii < sudoku._boardDim; ii++)
 	{
-		for (int jj = j * sudoku._gridDim; jj < (j + 1) * sudoku._gridDim; jj++)
-		{
-			int val = sudoku._sudokuBoard[_sudoku._boardDim * ii + jj];
-			if (val != 0)
-				takenValues[val - 1] = true;
-		}
+		int val = sudoku._sudokuBoard[sudoku._IndexesByGrid[i][ii]];
+		if (val != 0)
+			takenValues[val - 1] = true;
 	}
 
 	std::vector<int> freeValues; // stroe values that has not been placed in the grid being filled yet
@@ -84,19 +105,30 @@ void GeneticAlgorithm::FillRandomGrid(int i, int j, Sudoku& sudoku)
 		if (!takenValues[ii - 1])
 			freeValues.push_back(ii);
 
-	for (int ii = i * sudoku._gridDim; ii < (i + 1) * sudoku._gridDim; ii++)
+	//for (int ii = i * sudoku._gridDim; ii < (i + 1) * sudoku._gridDim; ii++)
+	//{
+	//	for (int jj = j * sudoku._gridDim; jj < (j + 1) * sudoku._gridDim; jj++)
+	//	{
+	//		// for each not filled field on the sudoku board, a value is drawn from among those that have not yet been used 
+	//		if (sudoku._sudokuBoard[sudoku._boardDim * ii + jj] == 0) 
+	//		{
+	//			int randomIndex = rand() % freeValues.size();
+	//			sudoku._sudokuBoard[sudoku._boardDim * ii + jj] = freeValues[randomIndex];
+	//			freeValues.erase(freeValues.begin() + randomIndex);
+	//		}
+	//	}
+	//}
+
+	for (int ii = 0; ii < sudoku._boardDim; ii++)
 	{
-		for (int jj = j * sudoku._gridDim; jj < (j + 1) * sudoku._gridDim; jj++)
+		if (sudoku._sudokuBoard[sudoku._IndexesByGrid[i][ii]] == 0)
 		{
-			// for each not filled field on the sudoku board, a value is drawn from among those that have not yet been used 
-			if (sudoku._sudokuBoard[sudoku._boardDim * ii + jj] == 0) 
-			{
-				int randomIndex = rand() % freeValues.size();
-				sudoku._sudokuBoard[sudoku._boardDim * ii + jj] = freeValues[randomIndex];
-				freeValues.erase(freeValues.begin() + randomIndex);
-			}
+			int randomIndex = rand() % freeValues.size();
+			sudoku._sudokuBoard[sudoku._IndexesByGrid[i][ii]] = freeValues[randomIndex];
+			freeValues.erase(freeValues.begin() + randomIndex);
 		}
 	}
+
 }
 
 /// <summary>
@@ -106,9 +138,14 @@ void GeneticAlgorithm::FillRandomGrid(int i, int j, Sudoku& sudoku)
 void GeneticAlgorithm::FillRandom(Sudoku& sudoku)
 {
 	// each grid of the sudoku board is separately randomly filled 
-	for (int i = 0; i < sudoku._boardDim / sudoku._gridDim; i++)
-		for (int j = 0; j < sudoku._boardDim / sudoku._gridDim; j++)
-			FillRandomGrid(i, j, sudoku);
+	//for (int i = 0; i < sudoku._boardDim / sudoku._gridDim; i++)
+	//	for (int j = 0; j < sudoku._boardDim / sudoku._gridDim; j++)
+	//		FillRandomGrid(i, j, sudoku);
+
+	for (int i = 0; i < sudoku._boardDim; i++)
+	{
+		FillRandomGrid(i,0, sudoku);
+  }
 }
 
 /// <summary>
@@ -240,7 +277,7 @@ void GeneticAlgorithm::FindParentsIndexes(int score)
 
 	for (int k = 0; k < _generationSize; k++)
 	{
-		if (_scores[k] <= score && _parentsIndexes.size() < _selectedPC * _generationSize)
+		if ((_scores[k]) <= score && _parentsIndexes.size() < _selectedPC * _generationSize)
 			_parentsIndexes.push_back(k); // parent sudoku puzzles selected by their best scores
 		else
 			_notBestIndexes.push_back(k);
@@ -255,6 +292,69 @@ void GeneticAlgorithm::FindParentsIndexes(int score)
 
 }
 
+
+
+
+void GeneticAlgorithm::FindParentsIndexesRoulette()
+{
+	double sum = 0;
+	std::uniform_real_distribution<> dis(0.0, 1.0);
+    
+	//std::vector<int> _roulette; 
+
+	int amountofParents = (_generationSize / _children)*2; // ile musze wybraæ
+
+	for (int i = 0; i < _generationSize; i++)
+	{
+		if (_scores[i] != 0)
+		{
+			//double corectedscore = 100 - _scores[i]; // tu funkcja dajaca wieksze szanse np mniejszym wynikom
+			double corectedscore = exp(-_scores[i] * 3);
+			corectedscore = corectedscore * corectedscore;
+			sum += corectedscore;
+			//zapisanie corrected score
+			_propabilityRoulette[i] = corectedscore;
+			
+		}
+	}
+
+	// obliczenie comulated propability
+	for (int i = 0; i < _generationSize; i++)
+	{
+		_propabilityRoulette[i] = _propabilityRoulette[i] / sum;
+		
+		if (i - 1 > 0)
+			_comulatedPropability[i] = _comulatedPropability[i - 1] + _propabilityRoulette[i];
+		else
+			_comulatedPropability[i] = _propabilityRoulette[i];
+		
+		if (i == _generationSize - 1)
+		{
+			_comulatedPropability[i] = 1; // bledy zaokraglen 
+		}
+	}
+	
+
+	
+
+	// wybieranie parrents
+	while (amountofParents != 0)
+	{
+		//double r = dis(gen);
+		double r = (double)rand() / RAND_MAX;
+	
+   		auto it = std::lower_bound(_comulatedPropability, _comulatedPropability+_generationSize, r);
+		 int index = std::distance(_comulatedPropability, it);
+		 _parentsIndexes.push_back(index);
+		 amountofParents--;
+	}
+
+	return;
+
+}
+
+
+
 /// <summary>
 /// Creates a child cudoku puzzle by combining characteristics of two parent puzzles.
 /// </summary>
@@ -266,10 +366,13 @@ Sudoku GeneticAlgorithm::CreateChild(const Sudoku& father, const Sudoku& mother)
 	
 	int fromMother = rand() % (father._boardDim - 1) + 1; // determine the number of grid segments to inherit from the mother
 
-	std::vector<std::tuple<int, int>> freeIndexes; // store the grid indexes available for inheritance
-	for (int i = 0; i < father._gridDim; i++)
-		for (int j = 0; j < father._gridDim; j++)
-			freeIndexes.push_back(std::make_tuple(i, j));
+	std::vector<int> freeIndexes; // store the grid indexes available for inheritance
+	for (int i = 0; i < father._boardDim; i++)
+	{
+		freeIndexes.push_back(i);
+	}
+		
+			
 
 	Sudoku child(father); // create a child sudoku puzzle initialized with the father's characteristics
 
@@ -277,15 +380,14 @@ Sudoku GeneticAlgorithm::CreateChild(const Sudoku& father, const Sudoku& mother)
 	for (int k = 0; k < fromMother; k++)
 	{
 		int randomIndex = rand() % freeIndexes.size();
-		std::tuple<int, int> gridIndexes = freeIndexes[randomIndex];
+	    int  gridIndexes = freeIndexes[randomIndex];
 		freeIndexes.erase(freeIndexes.begin() + randomIndex);
 
-		int i = std::get<0>(gridIndexes);
-		int j = std::get<1>(gridIndexes);
-
-		for (int ii = i * child._gridDim; ii < (i + 1) * child._gridDim; ii++)
-			for (int jj = j * child._gridDim; jj < (j + 1) * child._gridDim; jj++)
-				child._sudokuBoard[child._boardDim * ii + jj] = mother._sudokuBoard[child._boardDim * ii + jj];
+		for (int i = 0; i < 9; i++)
+		{
+			child._sudokuBoard[child._IndexesByGrid[gridIndexes][i]] = mother._sudokuBoard[child._IndexesByGrid[gridIndexes][i]];
+		}
+			
 	}
 
 	return child;
@@ -314,7 +416,27 @@ void GeneticAlgorithm::GenerateGeneration()
 		_previousGenereation[k] = Sudoku(_generation[k]);
 
 	srand(time(NULL));
-	FindParentsIndexes(FindMaxBestScore());
+	switch (_selectStrategy)
+	{
+	case ParentSelectStrategy::RankAndRandom:
+		FindParentsIndexes(FindMaxBestScore());
+	
+		break;
+	case ParentSelectStrategy::Tournament:
+		
+		
+		break;
+	case ParentSelectStrategy::Roulette:
+		FindMaxBestScore();
+		FindParentsIndexesRoulette();
+		break;
+	default:
+		
+		break;
+	}
+	
+	
+	
 
 	// perform crossover to generate children for the next generation
 	for (int k = 0; k < _generationSize; k += _children)
@@ -408,14 +530,19 @@ Sudoku GeneticAlgorithm::Solve()
 		Fitness();
 		if (_scores[_bestSudokuIndex] == 0) // sudoku solved
 			break;
-
+		if (k % 10 == 0)
+			std::cout << "Best Score after: " << k << " iteration is " << _scores[_bestSudokuIndex] << std::endl;
 		GenerateGeneration();
 
 		if (!_evolutionary)
 			MutatePopulation();
 	}
 
-	std::cout << "Solved after " << _restartCount << " restarts (" << _restartCount * _restartAfter << " iterations) and "
+	if (_scores[_bestSudokuIndex] == 0)
+		std::cout << "Solved after " << _restartCount << " restarts (" << _restartCount * _restartAfter << " iterations) and "
 		<< k % _restartAfter << " iterations.\n";
+	else
+		std::cout << "Not solved after " << _maxIter << " iterations (" << _restartCount << " restarts). \n"
+		<< "Returning sudoku with best score: " << _scores[_bestSudokuIndex] << std::endl;
 	return _generation[_bestSudokuIndex];
 }

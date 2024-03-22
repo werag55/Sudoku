@@ -17,6 +17,15 @@ Sudoku::Sudoku(int gridDim, int* values)
 	_gridDim = gridDim;
 	_boardDim = _gridDim * _gridDim;
 
+	_IndexesByGrid = new std::vector<int>[_boardDim];
+	
+
+	// inicjalizacja indeksow
+	for (int i = 0; i < _boardDim * _boardDim; i++)
+	{
+		_IndexesByGrid[Sudoku::WhichGrid(i)].push_back(i);
+	}
+
 	_sudokuBoard = new int[_boardDim * _boardDim];
 
 	for (int i = 0; i < _boardDim * _boardDim; i++)
@@ -30,6 +39,11 @@ Sudoku::Sudoku(int gridDim, int* values)
 Sudoku::Sudoku(const Sudoku& other) : 
 	_gridDim(other._gridDim), _boardDim(other._boardDim) 
 {
+	
+
+
+	_IndexesByGrid = other._IndexesByGrid;
+
 	_sudokuBoard = new int[_boardDim * _boardDim];
 	for (int i = 0; i < _boardDim * _boardDim; i++)
 		_sudokuBoard[i] = other._sudokuBoard[i];
@@ -66,8 +80,19 @@ void Sudoku::Print()
 }
 
 
-
-int Sudoku::WhichGrid(int index)
+/// <summary>
+///  Index of Grid base on index
+/// </summary>
+/// <param name="index"></param>
+/// <returns></returns>
+ int Sudoku::WhichGrid(int index)
 {
-	return 1;
+
+	int i = (index / 9) /3;
+	int j = (index % 9) /3;
+
+	int grid = i * 3 + j;
+
+	return grid;
+
 }

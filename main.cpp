@@ -28,6 +28,9 @@ void PrintDuration(std::chrono::microseconds duration) {
 
 int main(int argc, char* argv[])
 {
+
+	srand(static_cast<unsigned int>(time(nullptr)));
+
 	Sudoku sudoku = Sudoku(3, new int[81] {0, 8, 0, 0, 0, 0, 0, 9, 0, 
 										   0, 0, 7, 5, 0, 2, 8, 0, 0, 
 										   6, 0, 0, 8, 0, 7, 0, 0, 5, 
@@ -88,12 +91,25 @@ int main(int argc, char* argv[])
 
 	solved.Print();*/
 
+	/*std::cout<<Sudoku::WhichGrid(10);
+	std::cout<<Sudoku::WhichGrid(14);
+	std::cout<<Sudoku::WhichGrid(8);
+	std::cout<<Sudoku::WhichGrid(57);*/
+
+
+	for (int i = 0; i < 9; i++)
+	{
+		std::cout << sudoku2._IndexesByGrid[1].at(i) << std::endl;
+	}
+
 	BackTracing BackTracing(sudoku);
 	Sudoku solvedBack = BackTracing.Solve();
 	auto start = std::chrono::high_resolution_clock::now();
 	
-	GeneticAlgorithmBuilder geneticbuilder = GeneticAlgorithmBuilder(sudoku2);
-	GeneticAlgorithm geneticAlgorithm = geneticbuilder.generationSize(1000).maxIter(1000).restartAfter(100).build();
+	GeneticAlgorithmBuilder geneticbuilder = GeneticAlgorithmBuilder(sudoku);
+	// builderem wybierz strategie i inne parametry
+	GeneticAlgorithm geneticAlgorithm = geneticbuilder.generationSize(10000).maxIter(10000).restartAfter(1000).
+		selectStrategy(GeneticAlgorithm::ParentSelectStrategy::RankAndRandom).build();
 	Sudoku solved = geneticAlgorithm.Solve();
 	auto stop = std::chrono::high_resolution_clock::now();
 	auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop - start);
