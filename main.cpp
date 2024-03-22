@@ -108,8 +108,11 @@ int main(int argc, char* argv[])
 	
 	GeneticAlgorithmBuilder geneticbuilder = GeneticAlgorithmBuilder(sudoku);
 	// builderem wybierz strategie i inne parametry
-	GeneticAlgorithm geneticAlgorithm = geneticbuilder.generationSize(10000).maxIter(10000).restartAfter(1000).
-		selectStrategy(GeneticAlgorithm::ParentSelectStrategy::RankAndRandom).build();
+	/*GeneticAlgorithm geneticAlgorithm = geneticbuilder.generationSize(10000).maxIter(10000).restartAfter(100).
+		selectStrategy(GeneticAlgorithm::ParentSelectStrategy::Tournament).build();*/
+
+	GeneticAlgorithm geneticAlgorithm = geneticbuilder.generationSize(10000).maxIter(10000).restartAfter(100).
+		selectStrategy(GeneticAlgorithm::ParentSelectStrategy::Roulette).build();
 	Sudoku solved = geneticAlgorithm.Solve();
 	auto stop = std::chrono::high_resolution_clock::now();
 	auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop - start);

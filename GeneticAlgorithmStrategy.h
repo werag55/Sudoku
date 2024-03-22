@@ -66,4 +66,5 @@ private:
 	void SwapValues(Sudoku& sudoku, int index1, int index2);
 	void MutateSudoku(Sudoku& sudoku);
 	void MutatePopulation();
+	void FindParentsIndexesTournament(int k);
 };

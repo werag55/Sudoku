@@ -293,10 +293,13 @@ void GeneticAlgorithm::FindParentsIndexes(int score)
 }
 
 
-
+/// <summary>
+/// Znajduje ruletkowo rodzicow z popiusszzw
+/// </summary>
 
 void GeneticAlgorithm::FindParentsIndexesRoulette()
 {
+	_parentsIndexes.clear();
 	double sum = 0;
 	std::uniform_real_distribution<> dis(0.0, 1.0);
     
@@ -353,6 +356,32 @@ void GeneticAlgorithm::FindParentsIndexesRoulette()
 
 }
 
+
+void GeneticAlgorithm::FindParentsIndexesTournament(int K) {
+	_parentsIndexes.clear(); // clear
+	int amountOfParents = (_generationSize / _children) * 2; // ile rodziców
+
+
+
+	while (_parentsIndexes.size() < amountOfParents) {
+		int bestIndex = -1;
+		int bestScore = 200;
+
+		for (int i = 0; i < K; ++i) {
+			int randomIndex = rand() % _generationSize;
+			if (_scores[randomIndex] < bestScore) {
+				bestScore = _scores[randomIndex];
+				bestIndex = randomIndex;
+			}
+		}
+
+
+		if (bestIndex != -1) {
+			_parentsIndexes.push_back(bestIndex);
+
+		}
+	}
+}
 
 
 /// <summary>
@@ -423,7 +452,7 @@ void GeneticAlgorithm::GenerateGeneration()
 	
 		break;
 	case ParentSelectStrategy::Tournament:
-		
+		FindParentsIndexesTournament(4);
 		
 		break;
 	case ParentSelectStrategy::Roulette:
