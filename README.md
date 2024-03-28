@@ -45,4 +45,4 @@ Analyzing the characteristics of the Sudoku solving problem and the structure of
 The swap mutation strategy was used. For a specified number of individuals, a 3x3 subsquare is drawn, in which two random values are swapped (of course, it is impossible to modify the values from the input Sudoku puzzle).
 
 [^1]: David D., *Solving Sudoku puzzles with Genetic Algorithm*, https://nidragedd.github.io/sudoku-genetics/?fbclid=IwAR2XOArT7ngPySPg8Ap5fQHv6qROXT-M9azFdPvyH_0SBPlsUP2w9Ovswr8
-[^2]: Dr. John M. Weiss, *Genetic Algorithms and Sudoku *, https://micsymposium.org/mics_2009_proceedings/mics2009_submission_66.pdf
+[^2]: Dr. John M. Weiss, *Genetic Algorithms and Sudoku*, https://micsymposium.org/mics_2009_proceedings/mics2009_submission_66.pdf
