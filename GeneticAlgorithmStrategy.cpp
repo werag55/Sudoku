@@ -72,6 +72,7 @@ void GeneticAlgorithm::FindNotFixedIndexes()
 /// <param name="sudoku">The Sudoku puzzle to fill.</param>
 void GeneticAlgorithm::FillRandomGrid(int i, int j, Sudoku& sudoku)
 {
+	
 	bool* takenValues = new bool[sudoku._boardDim];
 	/*for (int ii = 0; ii < sudoku._boardDim; ii++)
 		takenValues[ii] = false; */
@@ -123,6 +124,9 @@ void GeneticAlgorithm::FillRandomGrid(int i, int j, Sudoku& sudoku)
 			freeValues.erase(freeValues.begin() + randomIndex);
 		}
 	}
+
+
+	delete takenValues;
 }
 
 /// <summary>
@@ -192,6 +196,10 @@ int GeneticAlgorithm::CountDuplicatesRowColumn(const Sudoku& sudoku, int i, int 
 		else
 			duplicates++; // increment duplicates count
 	}
+     
+
+	delete occuredColumn;
+	delete occuredRow;
 
 	return duplicates;
 }
@@ -416,6 +424,7 @@ void GeneticAlgorithm::CreateChildren(const Sudoku& father, const Sudoku& mother
 void GeneticAlgorithm::GenerateGeneration()
 {
 	// save current generation as _previousGeneration
+	delete[] _previousGenereation;
 	_previousGenereation = new Sudoku[_generationSize];
 	for (int k = 0; k < _generationSize; k++)
 		_previousGenereation[k] = Sudoku(_generation[k]);
@@ -528,23 +537,46 @@ Sudoku GeneticAlgorithm::Solve()
 			_restartCount++;
 			std::cout << _restartCount << ". RESTART (stucked at best score : " << _scores[_bestSudokuIndex] << ")\n";
 		}
+		
 
 		Fitness();
 		if (_scores[_bestSudokuIndex] == 0) // sudoku solved
 			break;
-		if (k % 10 == 0)
-			std::cout << "Best Score after: " << k << " iteration is " << _scores[_bestSudokuIndex] << std::endl;
+		/*if (k % 10 == 0)
+			std::cout << "Best Score after: " << k << " iteration is " << _scores[_bestSudokuIndex] << std::endl;*/
 		GenerateGeneration();
 
 		if (!_evolutionary)
 			MutatePopulation();
+
+
+		_iterationsnumber++;
+
 	}
 
 	if (_scores[_bestSudokuIndex] == 0)
+	{
 		std::cout << "Solved after " << _restartCount << " restarts (" << _restartCount * _restartAfter << " iterations) and "
-		<< k % _restartAfter << " iterations.\n";
+			<< k % _restartAfter << " iterations.\n";
+		_solved = true;
+	}
 	else
+	{
+		_bestScore = _scores[_bestSudokuIndex];
 		std::cout << "Not solved after " << _maxIter << " iterations (" << _restartCount << " restarts). \n"
-		<< "Returning sudoku with best score: " << _scores[_bestSudokuIndex] << std::endl;
+			<< "Returning sudoku with best score: " << _scores[_bestSudokuIndex] << std::endl;
+	}
+	    
 	return _generation[_bestSudokuIndex];
+}
+
+
+
+GeneticAlgorithm::~GeneticAlgorithm() {
+	delete[] _previousGenereation;
+	delete[] _generation;
+	delete[] _scores;
+	delete[] _propabilityRoulette;
+	delete[] _comulatedPropability;
+	delete[] _notFixedIndexesByGrid;
 }

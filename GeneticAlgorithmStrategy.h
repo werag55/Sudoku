@@ -16,6 +16,10 @@ public:
 
 	GeneticAlgorithm(const Sudoku& sudoku, int generationSize, double selectedPC, double randomPC, int children, double mutationPC, int maxIter, int restartAfter, ParentSelectStrategy selectStrategy);
 	Sudoku Solve();
+	int _iterationsnumber = 0;
+	bool _solved = false;
+	int _bestScore = 0;
+	~GeneticAlgorithm();
 
 private:
 
@@ -46,6 +50,8 @@ private:
 	int _bestSudokuIndex = 0;					// the index of the best solution in the _generation
 	int _bestScoreNotChangedSince = 0;			// the number of iterations since the best score remained unchanged
 
+	
+
 	void FindNotFixedIndexes();
 	void FillRandomGrid(int i, int j, Sudoku& sudoku);
 	void FillRandom(Sudoku& sudoku);
@@ -63,4 +69,7 @@ private:
 	void MutateSudoku(Sudoku& sudoku);
 	void MutatePopulation();
 	void FindParentsIndexesTournament(int k);
+
+
+
 };
