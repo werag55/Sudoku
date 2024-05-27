@@ -114,8 +114,7 @@ int main(int argc, char* argv[])
 	//sudoku.Print();
 	//solvedBack.Print();
 
-
-	GeneticAlgorithmTester tester(sudoku2, "result.txt");
+	GeneticAlgorithmTester tester(sudoku, "result.txt");
 	tester.Config();
 	tester.runTests();
 }
