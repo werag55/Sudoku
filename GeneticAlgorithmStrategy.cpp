@@ -38,22 +38,6 @@ GeneticAlgorithm::GeneticAlgorithm(const Sudoku& sudoku, int generationSize, dou
 
 void GeneticAlgorithm::FindNotFixedIndexes()
 {
-	//for (int i = 0; i < _sudoku._gridDim; i++) // iterate through row indexes of grids
-	//{
-	//	for (int j = 0; j < _sudoku._gridDim; j++) // iterate through column indexes of grids
-	//	{
-	//		for (int ii = 0; ii < _sudoku._gridDim; ii++) // iterate through row indexes of the values in the grid
-	//		{
-	//			for (int jj = 0; jj < _sudoku._gridDim; jj++) // iterate through column indexes of the values in the grid
-	//			{
-	//				if (_sudoku._sudokuBoard[(i * _sudoku._gridDim + ii) * _sudoku._boardDim + (j * _sudoku._gridDim + jj)] == 0)
-	//					_notFixedIndexesByGrid[i * _sudoku._gridDim + j].push_back
-	//						((i * _sudoku._gridDim + ii) * _sudoku._boardDim + (j * _sudoku._gridDim + jj)); // index of the unfixed value
-	//																										 // in sudoku board
-	//			}
-	//		}
-	//	}
-	//}
 
 	for (int i = 0; i < _sudoku._boardDim * _sudoku._boardDim; i++)
 	{
@@ -73,20 +57,7 @@ void GeneticAlgorithm::FindNotFixedIndexes()
 void GeneticAlgorithm::FillRandomGrid(int i, int j, Sudoku& sudoku)
 {
 	bool* takenValues = new bool[sudoku._boardDim];
-	/*for (int ii = 0; ii < sudoku._boardDim; ii++)
-		takenValues[ii] = false; */
 	std::fill(takenValues, takenValues + sudoku._boardDim, false);
-
-	/* fixed values*/
-	//for (int ii = i * sudoku._gridDim; ii < (i + 1) * sudoku._gridDim; ii++)
-	//{
-	//	for (int jj = j * sudoku._gridDim; jj < (j + 1) * sudoku._gridDim; jj++)
-	//	{
-	//		int val = sudoku._sudokuBoard[_sudoku._boardDim * ii + jj];
-	//		if (val != 0)
-	//			takenValues[val - 1] = true;
-	//	}
-	//}
 
 	for (int ii = 0; ii < sudoku._boardDim; ii++)
 	{
@@ -100,20 +71,6 @@ void GeneticAlgorithm::FillRandomGrid(int i, int j, Sudoku& sudoku)
 		if (!takenValues[ii - 1])
 			freeValues.push_back(ii);
 
-	//for (int ii = i * sudoku._gridDim; ii < (i + 1) * sudoku._gridDim; ii++)
-	//{
-	//	for (int jj = j * sudoku._gridDim; jj < (j + 1) * sudoku._gridDim; jj++)
-	//	{
-	//		// for each not filled field on the sudoku board, a value is drawn from among those that have not yet been used
-	//		if (sudoku._sudokuBoard[sudoku._boardDim * ii + jj] == 0)
-	//		{
-	//			int randomIndex = rand() % freeValues.size();
-	//			sudoku._sudokuBoard[sudoku._boardDim * ii + jj] = freeValues[randomIndex];
-	//			freeValues.erase(freeValues.begin() + randomIndex);
-	//		}
-	//	}
-	//}
-
 	for (int ii = 0; ii < sudoku._boardDim; ii++)
 	{
 		if (sudoku._sudokuBoard[sudoku._IndexesByGrid[i][ii]] == 0)
@@ -124,7 +81,7 @@ void GeneticAlgorithm::FillRandomGrid(int i, int j, Sudoku& sudoku)
 		}
 	}
 
-	delete takenValues;
+	delete[] takenValues;
 }
 
 /// <summary>
@@ -134,9 +91,6 @@ void GeneticAlgorithm::FillRandomGrid(int i, int j, Sudoku& sudoku)
 void GeneticAlgorithm::FillRandom(Sudoku& sudoku)
 {
 	// each grid of the sudoku board is separately randomly filled
-	//for (int i = 0; i < sudoku._boardDim / sudoku._gridDim; i++)
-	//	for (int j = 0; j < sudoku._boardDim / sudoku._gridDim; j++)
-	//		FillRandomGrid(i, j, sudoku);
 
 	for (int i = 0; i < sudoku._boardDim; i++)
 	{
@@ -195,8 +149,8 @@ int GeneticAlgorithm::CountDuplicatesRowColumn(const Sudoku& sudoku, int i, int 
 			duplicates++; // increment duplicates count
 	}
 
-	delete occuredColumn;
-	delete occuredRow;
+	delete[] occuredColumn;
+	delete[] occuredRow;
 
 	return duplicates;
 }
@@ -335,7 +289,6 @@ void GeneticAlgorithm::FindParentsIndexesRoulette()
 	// wybieranie parrents
 	while (amountofParents != 0)
 	{
-		//double r = dis(gen);
 		double r = (double)rand() / RAND_MAX;
 
 		auto it = std::lower_bound(_comulatedPropability, _comulatedPropability + _generationSize, r);

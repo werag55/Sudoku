@@ -49,7 +49,6 @@ void GeneticAlgorithmTester::Config() {
 	int restartAfter = 100;
 	GeneticAlgorithm::ParentSelectStrategy selectStrategy = GeneticAlgorithm::ParentSelectStrategy::Roulette;
 
-	// memory leaki idk
 	for (int generationSize = 6000; generationSize <= 10000; generationSize += 1000) {
 		TestConfig config;
 		config.generationSize = generationSize;

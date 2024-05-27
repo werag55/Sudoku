@@ -2,8 +2,8 @@
 
 #include <string>
 #include <vector>
-#include "TestConfig.h" // Zaimportuj strukturê TestConfig
-#include "Sudoku.h" // Za³ó¿my, ¿e istnieje klasa Sudoku
+#include "TestConfig.h"
+#include "Sudoku.h"
 
 class GeneticAlgorithmTester {
 private:

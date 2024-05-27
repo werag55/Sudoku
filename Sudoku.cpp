@@ -5,7 +5,7 @@
 /// Default constructor for Sudoku. Initializes grid dimensions and sudoku board to null.
 /// </summary>
 Sudoku::Sudoku() :
-	_gridDim(0), _boardDim(0), _sudokuBoard(nullptr) {}
+	_gridDim(0), _boardDim(0), _sudokuBoard(nullptr), _IndexesByGrid(nullptr) {}
 
 /// <summary>
 /// Constructor for Sudoku with specified grid dimensions and values.
