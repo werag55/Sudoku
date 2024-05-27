@@ -6,9 +6,10 @@
 /// Constructs the PencilMark object with the given sudoku puzzle.
 /// </summary>
 /// <param name="sudoku">The sudoku puzzle to solve.</param>
-PencilMark::PencilMark(const Sudoku& sudoku)
+PencilMark::PencilMark(const Sudoku& sudoku,int maxIter)
 {
 	_sudoku = Sudoku(sudoku);
+	_maxIter = maxIter;
 
 	_pencilMarks = new bool* [_sudoku._boardDim * _sudoku._boardDim];
 	for (int i = 0; i < _sudoku._boardDim * _sudoku._boardDim; i++)
@@ -115,8 +116,10 @@ Sudoku PencilMark::Solve()
 {
 	int toSolve = _sudoku._boardDim * _sudoku._boardDim - CountFixedValues(); // the number of fields to fill
 
-	while (toSolve > 0) // continue solving until all cells are filled
+	int i = 0;
+	while (toSolve > 0 && i < _maxIter) // continue solving until all cells are filled
 	{
+		i++;
 		for (int i = 0; i < _sudoku._boardDim && toSolve > 0; i++)
 		{
 			for (int j = 0; j < _sudoku._boardDim && toSolve > 0; j++)
