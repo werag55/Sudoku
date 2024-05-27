@@ -29,6 +29,19 @@ int main(int argc, char* argv[])
 {
 	srand(static_cast<unsigned int>(time(nullptr)));
 
+
+	Sudoku sudoku4 = Sudoku(3, new int[81] {
+		0, 1, 0, 6, 0, 4, 3, 0, 7,
+		3, 5, 6, 0, 0, 0, 0, 0, 0,
+		0, 0, 0, 0, 5, 3, 6, 9, 0,
+		0, 8, 3, 2, 6, 0, 4, 0, 9,
+		0, 0, 0, 0, 0, 0, 0, 0, 0,
+		4, 0, 5, 0, 7, 8, 2, 6, 0,
+		0, 4, 2, 5, 3, 0, 0, 0, 0,
+		0, 0, 0, 0, 0, 0, 7, 2, 4,
+		7, 0, 9, 4, 0, 2, 0, 8, 0,
+		});
+
 	Sudoku sudoku = Sudoku(3, new int[81] {0, 8, 0, 0, 0, 0, 0, 9, 0,
 		0, 0, 7, 5, 0, 2, 8, 0, 0,
 		6, 0, 0, 8, 0, 7, 0, 0, 5,
@@ -71,7 +84,7 @@ int main(int argc, char* argv[])
 
 	//sudoku2.Print();
 
-	GeneticAlgorithmTester tester(sudoku3, "result.txt");
+	GeneticAlgorithmTester tester(sudoku4, "result.txt");
 	tester.Config();
 	tester.runTests();
 }
